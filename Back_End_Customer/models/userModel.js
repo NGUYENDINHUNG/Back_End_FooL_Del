@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     cartData: { type: Object, default: {} },
   },
-  { mininize: false }
+  { minimize: false } // Đúng là 'minimize' chứ không phải 'mininize'
 );
 
 const userModel = mongoose.models.user || mongoose.model("user", userSchema);
