@@ -2,14 +2,35 @@ import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
+import "dotenv/config";
 import { response } from "express";
 
 //login user
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await userModel.findOne({ email });
 
-const loginUser = async (req, res) => {};
+    if (!user) {
+      return res.json({ success: false, message: "Nguời dùng không tồn tại" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.json({ success: false, message: "Thông tin không hợp lệ" });
+    }
+
+    const token = createToken(user._id);
+    res.json({ success: true, token });
+  } catch (error) {
+    console.log(error);
+    res.json({success:false , message:"error"})
+  }
+};
 
 const createToken = (id) => {
-  return jwt.sign({id},process.env.TWT_SECRET);
+  return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 //register user
 const registerUser = async (req, res) => {
@@ -19,20 +40,20 @@ const registerUser = async (req, res) => {
     //checking is user already exists
     const exists = await userModel.findOne({ email });
     if (exists) {
-      return res.json({ success: false, message: "User already exists" });
+      return res.json({ success: false, message: "Tài khoản đã tồn tại" });
     }
     // validating email format & strong password
-    if (!validator.isEmail(email)) {  
+    if (!validator.isEmail(email)) {
       return res.json({
         success: false,
-        message: "Please enter a valid email",
+        message: "Vui lòng điền đúng định dạng email",
       });
     }
 
-    if (password.lenght < 8) {
+    if (password.length < 8) {
       return res.json({
         success: false,
-        message: "Please enter a strong password",
+        message: "Mật khẩu chưa đủ độ dài",
       });
     }
 
@@ -54,6 +75,5 @@ const registerUser = async (req, res) => {
     res.json({ success: false, message: "Error" });
   }
 };
-
 
 export { loginUser, registerUser };
