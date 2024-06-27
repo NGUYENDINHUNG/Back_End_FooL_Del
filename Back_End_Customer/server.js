@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { connectDB } from "./config/db.js";
-import foodRouter from "./routes/foodRoutes.js";
-import userRouter from "./routes/userRouter.js";
-import cartRouter from "./routes/cartRoutes.js";
-import orderRouter from "./routes/orderRoutes.js";
+import foodRouter from "./routes/foodRoute.js";
+import userRouter from "./routes/userRoute.js";
+import cartRouter from "./routes/cartRoute.js";
+import orderRouter from "./routes/orderRoute.js";
 // app config
 const app = express();
 const port = 4000;

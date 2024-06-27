@@ -17,7 +17,7 @@ const loginUser = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!isMatch) {
+    if (!isMatch) {   
       return res.json({ success: false, message: "Thông tin không hợp lệ" });
     }
 
@@ -74,6 +74,7 @@ const registerUser = async (req, res) => {
     console.log(error);
     res.json({ success: false, message: "Error" });
   }
-};
+}
+
 
 export { loginUser, registerUser };
